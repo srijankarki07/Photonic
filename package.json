@@ -1,0 +1,21 @@
+{
+  "name": "photonic",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local-first Google Photos backup for Linux",
+  "packageManager": "pnpm@12.14.0",
+  "scripts": {
+    "dev": "pnpm --dir desktop app:dev",
+    "app": "pnpm --dir desktop app:dev",
+    "app:dev": "pnpm --dir desktop app:dev",
+    "app:build": "pnpm --dir desktop app:build",
+    "app:deb": "pnpm --dir desktop app:deb",
+    "web:dev": "pnpm --dir desktop dev",
+    "typecheck": "pnpm --dir desktop typecheck",
+    "build": "pnpm --dir desktop build",
+    "test": "bash scripts/test-engine.sh",
+    "test:engine": "bash scripts/test-engine.sh",
+    "check": "bash scripts/check-env.sh",
+    "setup:engine": "bash scripts/bootstrap-engine.sh"
+  }
+}

@@ -1,0 +1,29 @@
+# Dependencies and build output
+node_modules/
+
+# Editors, OS, and agent caches
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.agents/
+.windsurf/
+.cursor/
+
+# Developer-only material. None of this is needed to use Photonic.
+/CLAUDE.md
+/ISSUES.md
+/HOW-IT-WORKS.md
+/branch.md
+/docs/
+/.claude/
+/skills-lock.json
+/packaging/
+
+# Developer scripts
+/scripts/*
+
+# Desktop build output
+/desktop/dist/
+/desktop/src-tauri/target/
+/desktop/src-tauri/binaries/
