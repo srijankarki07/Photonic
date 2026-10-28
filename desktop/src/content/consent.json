@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "title": "Before we back up your photos",
+  "intro": "Photonic is an independent app. Please read this short note first.",
+  "bullets": [
+    "Photonic is not made by, endorsed by, or supported by Google or the ReVanced project.",
+    "It uses an unofficial Google Photos upload path. Google may limit, restrict, or suspend the connected account.",
+    "Use a test or secondary account first, and keep your own backups. There is no guarantee of unlimited storage.",
+    "Your photos go directly from this computer to Google Photos. Photonic has no server, account, or telemetry.",
+    "Your sign-in key stays in your desktop's password manager and is never kept in history, logs, or settings.",
+    "Photonic never changes or deletes your originals."
+  ],
+  "checkbox": "I understand the risk and want to continue.",
+  "continueLabel": "Continue",
+  "learnMore": "How Photonic works"
+}
