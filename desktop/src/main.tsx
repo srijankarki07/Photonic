@@ -1,0 +1,15 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "@fontsource-variable/inter/wght.css";
+import "@fontsource-variable/fraunces/wght.css";
+import App from "./App";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import "./index.css";
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  </React.StrictMode>,
+);
