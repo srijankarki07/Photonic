@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Photonic design tokens - light, aperture, photography.
+   One accent (photon amber), warm near-black surfaces, editorial type.
+   ───────────────────────────────────────────────────────────────────────── */
+@theme {
+  --font-sans:
+    "Inter Variable", "Inter", "Geist", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+  --font-display:
+    "Fraunces Variable", "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-mono:
+    "JetBrains Mono", "SFMono-Regular", ui-monospace, "Cascadia Code",
+    monospace;
+
+  --color-ink-950: #0a0908;
+  --color-ink-900: #0f0d0b;
+  --color-ink-850: #14110f;
+  --color-ink-800: #1a1613;
+  --color-ink-700: #241f1b;
+
+  --color-photon-200: #ffe6bd;
+  --color-photon-300: #ffd18a;
+  --color-photon-400: #f6b45c;
+  --color-photon-500: #e89a3c;
+  --color-photon-600: #c97b26;
+
+  --radius-control: 10px;
+  --radius-panel: 14px;
+  --radius-hero: 20px;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-ink-950);
+  color: #ece9e4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  user-select: none;
+  background:
+    radial-gradient(
+      70% 55% at 55% 0%,
+      rgba(246, 180, 92, 0.08),
+      transparent 65%
+    ),
+    var(--color-ink-950);
+}
+
+h1,
+h2,
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-photon-400) 32%, transparent);
+  color: #fff;
+}
+
+/* Thin, warm scrollbars. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #332b25 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #332b25;
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #4a3f36;
+  background-clip: content-box;
+}
+
+/* Subtle film-grain over the whole window without an image asset. */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* A single soft prism light, reserved for hero moments. */
+.prism-light {
+  background:
+    radial-gradient(
+      42% 55% at 38% 42%,
+      rgba(246, 180, 92, 0.18),
+      transparent 72%
+    ),
+    radial-gradient(
+      36% 48% at 68% 55%,
+      rgba(255, 230, 189, 0.08),
+      transparent 75%
+    );
+}
+
+/* Clickable affordances: Tailwind v4 resets buttons to cursor: default. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  summary,
+  select,
+  input[type="checkbox"],
+  input[type="radio"],
+  label:has(input[type="checkbox"], input[type="radio"]) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"],
+  input:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
