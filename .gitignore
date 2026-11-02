@@ -1,5 +1,17 @@
 # Dependencies and build output
 node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+target/
+desktop/src-tauri/target/
+desktop/src-tauri/gen/
+desktop/src-tauri/binaries/
+desktop/src-tauri/icons/android/
+desktop/src-tauri/icons/ios/
+desktop/src-tauri/icons/Square*.png
+desktop/src-tauri/icons/StoreLogo.png
 build/
 __pycache__/
 *.py[cod]
@@ -38,11 +50,7 @@ Thumbs.db
 /.claude/
 /skills-lock.json
 /packaging/
+/desktop/README.md
 
 # Developer scripts
 /scripts/*
-
-# Desktop build output
-/desktop/dist/
-/desktop/src-tauri/target/
-/desktop/src-tauri/binaries/
