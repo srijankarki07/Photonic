@@ -41,3 +41,8 @@ Thumbs.db
 
 # Developer scripts
 /scripts/*
+
+# Desktop build output
+/desktop/dist/
+/desktop/src-tauri/target/
+/desktop/src-tauri/binaries/
