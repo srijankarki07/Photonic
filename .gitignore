@@ -52,5 +52,6 @@ Thumbs.db
 /packaging/
 /desktop/README.md
 
-# Developer scripts
+# Developer scripts; the AppImage desktop helper is user-facing and stays.
 /scripts/*
+!/scripts/install-appimage-desktop.sh
