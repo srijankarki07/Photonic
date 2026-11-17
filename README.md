@@ -99,7 +99,9 @@ Advanced section with diagnostics, paths, and a way to clear finished backups.
 
 Computer:
 
-- Linux, x86_64 (Ubuntu 24.04 or a Debian-based distribution is tested).
+- Linux, x86_64, glibc 2.39 or newer. Ubuntu 24.04 or newer is tested; the
+  release builds use the same toolchain, so older distributions will not run
+  them.
 - A desktop session with a Secret Service keyring (GNOME Keyring or KWallet).
 - The `.deb` declares `libwebkit2gtk-4.1-0`, `libgtk-3-0`, `libssl3`, and
   `ca-certificates`.
@@ -318,6 +320,8 @@ Efficiency choices behind these numbers:
 - The upload path is unofficial. Use a test account, keep independent backups,
   and expect that Google may rate-limit, restrict, or suspend accounts.
   Photonic does not promise unlimited storage or continued API availability.
+- To report a vulnerability, or if you think a sign-in key has leaked, follow
+  [SECURITY.md](SECURITY.md).
 
 ## Troubleshooting
 
