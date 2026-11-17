@@ -77,23 +77,36 @@ opens Connect instead of failing.
 
 ## Screens
 
+The first run opens with a plain-language consent screen. Nothing is captured
+and nothing uploads until you read it and opt in.
+
+![Onboarding and consent screen](screenshots/onboarding.webp)
+
 **Back up** starts a scan or accepts drag and drop. After a scan it shows a
 compact file list, the total size, skipped files, and a Review action. A live
 card follows the current or last backup.
+
+![Back up screen with a live backup card](screenshots/backup.webp)
 
 **Review** shows a summary, skipped files with plain reasons, album options
 (Timeline, one album for this backup, or one album per folder), and the files
 in a thumbnail grid by default with a list toggle and search. Nothing uploads
 until Upload is pressed.
 
+![Review screen with album options and the file grid](screenshots/review.webp)
+
 **Activity** has In progress and Past tabs. It shows overall percentage, bytes
 completed, upload speed, per-file state, and reasons. It offers Stop, Resume,
 Retry failed, and an explicit unconfirmed retry for files whose outcome is
 unknown. Technical details such as media keys and error codes are collapsed.
 
+![Activity screen with per-file progress](screenshots/activity.webp)
+
 **Settings** covers the connection (status, masked email, expected expiry,
 disconnect), a plain-language explanation of how Photonic works, and an
 Advanced section with diagnostics, paths, and a way to clear finished backups.
+
+![Settings screen with connection and advanced details](screenshots/settings.webp)
 
 ## Requirements
 
