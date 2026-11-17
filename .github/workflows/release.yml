@@ -32,9 +32,13 @@ jobs:
         with:
           version: 12.14.0
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
+      # Use the distribution Python rather than a toolcache build. The
+      # distribution build ships a stripped libpython, which keeps the bundled
+      # sidecars roughly 20 MB smaller, and it matches what users run.
+      - name: Install Python
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python3 python3-venv
 
       - name: Install frontend dependencies
         working-directory: desktop
@@ -55,10 +59,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -73,11 +73,15 @@ jobs:
         with:
           workspaces: desktop/src-tauri
 
+      # Distribution Python, not a toolcache build: the distro libpython is
+      # stripped, which keeps the bundled sidecars about 20 MB smaller, and it
+      # matches what users run.
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             build-essential curl file patchelf wget \
+            python3 python3-venv \
             libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev \
             libayatana-appindicator3-dev libxdo-dev libssl-dev
 
