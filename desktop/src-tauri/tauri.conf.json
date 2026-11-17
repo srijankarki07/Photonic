@@ -33,16 +33,28 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "licenseFile": "../../LICENSE",
+    "publisher": "Photonic contributors",
+    "homepage": "https://github.com/srijankarki07/Photonic",
+    "copyright": "Copyright (c) 2026 Srijan Karki",
+    "category": "Utility",
+    "shortDescription": "Local-first Google Photos backup for Linux",
+    "longDescription": "Photonic backs up photos and videos from your computer to Google Photos with a review step, live progress, safe retries, and a local history. It is a one-way backup tool: it never deletes or renames anything in Google Photos. Photonic is not affiliated with, endorsed by, or supported by Google, and it uses an unofficial upload path.",
     "resources": [
       "binaries/photonic-engine",
-      "binaries/gpmc"
+      "binaries/gpmc",
+      "resources/"
     ],
     "linux": {
       "deb": {
         "depends": [
           "libssl3",
           "ca-certificates"
-        ]
+        ],
+        "files": {
+          "/usr/share/doc/photonic/copyright": "resources/NOTICES",
+          "/usr/share/doc/photonic/LICENSE": "resources/LICENSE"
+        }
       }
     },
     "icon": [

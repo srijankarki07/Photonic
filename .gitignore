@@ -8,6 +8,7 @@ target/
 desktop/src-tauri/target/
 desktop/src-tauri/gen/
 desktop/src-tauri/binaries/
+desktop/src-tauri/resources/
 desktop/src-tauri/icons/android/
 desktop/src-tauri/icons/ios/
 desktop/src-tauri/icons/Square*.png
@@ -41,7 +42,7 @@ Thumbs.db
 .windsurf/
 .cursor/
 
-# Developer-only material. None of this is needed to use Photonic.
+# Private working notes. Build and packaging inputs are public; see below.
 /CLAUDE.md
 /ISSUES.md
 /HOW-IT-WORKS.md
@@ -49,9 +50,4 @@ Thumbs.db
 /docs/
 /.claude/
 /skills-lock.json
-/packaging/
 /desktop/README.md
-
-# Developer scripts; the AppImage desktop helper is user-facing and stays.
-/scripts/*
-!/scripts/install-appimage-desktop.sh
