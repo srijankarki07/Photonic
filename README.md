@@ -9,11 +9,16 @@ per-file progress, retries and recovery, and a guided phone sign-in. Media goes
 directly from your computer to Google. There is no Photonic account, server, or
 telemetry.
 
-> **Status:** packaged and working. A `.deb` and an AppImage are produced, and
-> uploads, recovery, live progress, history, and the guided sign-in have been
-> tested with a real phone and a 100+ file library. Public release gates still
-> open: clean-VM install test, complete third-party notices, code signing and
-> update decisions, and a licensing review for Photonic's own source.
+> **Status:** early public release. Version 0.1.0 ships as a `.deb` and an
+> AppImage from the [releases page](https://github.com/srijankarki07/Photonic/releases).
+> Uploads, recovery, live progress, history, and the guided sign-in have been
+> tested with a real phone and a 100+ file library. The builds are not code
+> signed and a clean-VM install test is still pending, so verify the published
+> checksum before you run one. Photonic is MIT licensed and developed in the
+> open.
+
+> **Not affiliated with Google.** Photonic uses an unofficial upload path. Read
+> the [risk notice](#risk-notice) before you connect an account.
 
 ## What Photonic does
 
@@ -116,6 +121,18 @@ or `gpmc` installation is needed.
 
 ## Install
 
+Download the `.deb` or the AppImage from the
+[releases page](https://github.com/srijankarki07/Photonic/releases/latest).
+Each release publishes a `SHA256SUMS.txt` next to the artifacts:
+
+```bash
+sha256sum -c SHA256SUMS.txt --ignore-missing
+```
+
+The builds are not code signed yet, so your distribution or desktop may warn
+that the package is unverified. The checksum is the only integrity check for
+now; signed releases are planned.
+
 Debian or Ubuntu package:
 
 ```bash
@@ -133,10 +150,19 @@ chmod +x Photonic_0.1.0_amd64.AppImage
 
 An AppImage is not installed by running it, so GNOME may show a generic gear
 in the dock because it has no application entry to associate. Either install
-the `.deb`, or register the AppImage once from the repository checkout:
+the `.deb`, or register the AppImage once:
 
 ```bash
 scripts/install-appimage-desktop.sh "$PWD/Photonic_0.1.0_amd64.AppImage"
+```
+
+That script is in this repository. Download it directly if you only have the
+AppImage:
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/srijankarki07/Photonic/main/scripts/install-appimage-desktop.sh
+chmod +x install-appimage-desktop.sh
+./install-appimage-desktop.sh "$PWD/Photonic_0.1.0_amd64.AppImage"
 ```
 
 That writes a per-user desktop entry and hicolor icons. Launch Photonic from
@@ -145,6 +171,34 @@ the applications menu afterwards. Remove it later with
 
 Uninstalling the `.deb` does not delete backup history. Data lives in
 `~/.local/share/photonic/`.
+
+## Build from source
+
+Requires the Tauri Linux dependencies (see
+[scripts/install-linux-deps.sh](scripts/install-linux-deps.sh)), Rust,
+Node.js with pnpm, and Python 3.11 or newer.
+
+```bash
+git clone https://github.com/srijankarki07/Photonic.git
+cd Photonic
+
+# 1. Bundle the Python engine and gpmc sidecars.
+#    This also generates NOTICES and stages the licence files.
+packaging/build_sidecars.sh
+
+# 2. Build the desktop bundles.
+cd desktop
+pnpm install
+pnpm app:build      # .deb and AppImage
+pnpm app:deb        # .deb only
+pnpm tauri build --bundles appimage
+```
+
+Artifacts land in `desktop/src-tauri/target/release/bundle/`. The bundled app
+needs no system Python, pip package, or `gpmc` installation.
+
+Run the engine tests with `scripts/test-engine.sh`, and type check the UI with
+`pnpm typecheck` from `desktop/`.
 
 ## First run
 
@@ -302,10 +356,11 @@ Logs and data:
   rows while counts cover every file.
 - Two-way sync, cloud deletion, and rename propagation are intentionally out of
   scope.
-- Code signing, signed updates, a clean-VM install test, and the full
-  third-party notices text bundle remain before a public release.
-- Photonic's own source is currently unlicensed. Do not publish binaries until
-  the licensing review is complete.
+- The 0.1.0 builds are not code signed, and signed updates are not
+  implemented. A clean-VM install and uninstall test is still pending.
+- Distribution packages are built locally or by the release workflow, not by a
+  reproducible-build setup. Compare the published checksum if you build your
+  own.
 
 ## Risk notice
 
@@ -321,6 +376,21 @@ availability of the underlying API.
 
 ## License
 
-Photonic's own source is currently unlicensed and pending review. Bundled
-third-party components have their own licenses; the uploader `gpmc` is MIT.
-`gphototool` and `gp_disguise` are not bundled.
+Photonic is released under the [MIT License](LICENSE).
+
+It bundles third-party software, including the MIT-licensed `gpmc` uploader,
+the Python runtime, and the libraries behind the desktop shell. The full text
+of every bundled license is in [NOTICES](NOTICES). The `.deb` installs it at
+`/usr/share/doc/photonic/copyright`, and the AppImage carries it in its
+resource directory.
+
+`gphototool` and `gp_disguise` are not bundled and no code from them is used.
+
+### Contributing
+
+Issues and pull requests are welcome. Keep changes consistent with the
+constraints that make Photonic safe to run: no hosted backend, no telemetry,
+secrets only in the OS keyring, truthful file state, and one-way backup
+semantics. Run the engine tests and a type check before opening a pull
+request.
+

@@ -1,11 +1,11 @@
 # Third-party notices and licensing status
 
-**Status:** packaging draft. The sidecar bundle is built by
-`packaging/build_sidecars.sh`; verify the release gate in
-`docs/05-security-privacy-legal.md` before publishing binaries.
-**Audit date:** 2026-10-24
+**Status:** released. Photonic is MIT licensed (see `LICENSE`). The full
+generated notices bundle is in `NOTICES`, which is produced by
+`packaging/generate_notices.py` and ships with the `.deb` and the AppImage.
+**Audit date:** 2026-10-24 · **Notices generated:** 2026-11-17
 
-Photonic's own source is currently unlicensed/TBD.
+Photonic's own source is MIT licensed.
 
 ## Runtime components
 
@@ -50,8 +50,9 @@ Photonic's own source is currently unlicensed/TBD.
    `gphototool` or `gp_disguise`.
 2. Arbitrary-file disguise remains out of scope until licensed or
    independently implemented.
-3. A generated `NOTICES` file with the full MIT/ISC/Apache/BSD/MPL/OFL texts
-   must be added to the bundle before a public release.
+3. The generated `NOTICES` file carries the full MIT/ISC/Apache/BSD/MPL/OFL/PSF
+   texts for every bundled component. Regenerate it with
+   `python3 packaging/generate_notices.py` after any dependency change.
 4. PyInstaller's exception covers bundling this non-GPL application.
 
 ## Verification tasks before public release
@@ -59,8 +60,11 @@ Photonic's own source is currently unlicensed/TBD.
 - [x] Read `gpmc`'s LICENSE and record the copyright line (MIT, © 2024 xob0t).
 - [x] Confirm `gphototool` and `gp_disguise` are excluded from the bundle.
 - [x] Confirm PyInstaller's exception for a non-GPL application.
-- [ ] Generate the full `NOTICES` text bundle and install it with the app.
-- [ ] Decide whether `ffmpeg` is a system dependency (currently not used).
-- [ ] Re-audit after every dependency upgrade.
+- [x] Generate the full `NOTICES` text bundle and install it with the app.
+      The `.deb` puts it at `/usr/share/doc/photonic/copyright`; the AppImage
+      carries it in its resource directory.
+- [x] Decide whether `ffmpeg` is a system dependency (currently not used).
+- [ ] Re-audit after every dependency upgrade by rerunning
+      `python3 packaging/generate_notices.py` and reviewing the diff.
 
 This file is a record of the audit, not legal advice.
