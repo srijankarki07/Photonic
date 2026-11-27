@@ -6,6 +6,7 @@ import {
   Play,
   RefreshCw,
   RotateCcw,
+  ShieldCheck,
   X,
 } from "lucide-react";
 import { Button } from "../components/ui";
@@ -14,10 +15,7 @@ import { Disclosure } from "../components/Disclosure";
 import { MediaRow } from "../components/MediaRow";
 import { StatusDot } from "../components/StatusDot";
 import type { JobFile, JobSnapshot } from "../lib/engine/types";
-import {
-  FILE_STATE,
-  JOB_STATUS,
-} from "../lib/jobLabels";
+import { FILE_STATE, JOB_STATUS } from "../lib/jobLabels";
 import {
   basename,
   formatBytes,
@@ -86,7 +84,8 @@ export function ActivityJob({
     (file) => file.code === "already_uploaded",
   ).length;
   const sorted = useMemo(
-    () => [...job.files].sort((left, right) => left.path.localeCompare(right.path)),
+    () =>
+      [...job.files].sort((left, right) => left.path.localeCompare(right.path)),
     [job.files],
   );
   const visible = sorted.slice(0, limit);
@@ -107,25 +106,35 @@ export function ActivityJob({
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-8 py-8">
+    <div className={onBack ? "mx-auto w-full max-w-3xl px-8 py-9" : ""}>
       {onBack && (
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex cursor-pointer items-center gap-1.5 text-[13px] text-stone-500 transition hover:text-stone-200"
+          className="inline-flex cursor-pointer items-center gap-1.5 rounded-[6px] text-[13px] font-medium text-stone-400 transition hover:text-stone-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400"
         >
           <ArrowLeft className="size-3.5" />
           Back to Activity
         </button>
       )}
 
-      <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
+      <div
+        className={
+          onBack
+            ? "mt-5 flex flex-wrap items-start justify-between gap-3"
+            : "flex flex-wrap items-start justify-between gap-3"
+        }
+      >
         <div className="min-w-0">
-          <h1 className="font-display text-[34px] leading-tight text-stone-50">
-            Backup
-          </h1>
+          {onBack ? (
+            <h1 className="text-[34px] leading-tight text-stone-50">Backup</h1>
+          ) : (
+            <h2 className="display text-[28px] leading-tight text-stone-50">
+              Backup
+            </h2>
+          )}
           <p
-            className="mt-1.5 truncate text-sm text-stone-500"
+            className="mt-1.5 truncate font-mono text-[13px] text-stone-400"
             title={job.root}
           >
             {job.selection && job.selection.length > 1
@@ -135,17 +144,17 @@ export function ActivityJob({
             {relativeTime(job.createdAt)}
           </p>
         </div>
-        <StatusDot tone={status.tone} label={status.label} />
+        <StatusDot tone={status.tone} label={status.label} pulse={active} />
       </div>
 
-      <section className="mt-8">
-        <div className="flex items-end justify-between gap-6">
+      <section className="surface-panel mt-6 rounded-[16px] p-6">
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="font-display text-[48px] leading-none tabular-nums text-stone-50">
+            <p className="display text-[48px] leading-none tabular-nums text-stone-50">
               {Math.round(job.percent)}
-              <span className="ml-1 text-2xl text-stone-500">%</span>
+              <span className="ml-1 text-2xl text-stone-400">%</span>
             </p>
-            <p className="mt-2 text-sm text-stone-400">
+            <p className="mt-2.5 text-sm tabular-nums text-stone-300">
               {formatCount(job.completedFiles + job.skippedFiles)} of{" "}
               {formatCount(job.totalFiles)} files ·{" "}
               {formatBytes(job.bytesCompleted)} of {formatBytes(job.totalBytes)}
@@ -157,22 +166,33 @@ export function ActivityJob({
               )}
             </p>
           </div>
-          <div className="text-right text-[13px] text-stone-500">
-            {job.failedFiles > 0 && <p>{job.failedFiles} couldn't upload</p>}
-            {retryable > 0 && <p>{retryable} can be retried</p>}
+          <div className="space-y-0.5 text-right text-[13px] tabular-nums">
+            {job.failedFiles > 0 && (
+              <p className="text-red-300">{job.failedFiles} couldn't upload</p>
+            )}
+            {retryable > 0 && (
+              <p className="text-photon-300">{retryable} can be retried</p>
+            )}
             {job.uncertainFiles > 0 && (
-              <p>{job.uncertainFiles} need checking</p>
+              <p className="text-photon-300">
+                {job.uncertainFiles} need checking
+              </p>
             )}
             {job.skippedFiles > 0 && (
-              <p>{job.skippedFiles} won't be uploaded</p>
+              <p className="text-stone-400">
+                {job.skippedFiles} won't be uploaded
+              </p>
             )}
             {alreadyUploaded > 0 && (
-              <p>{alreadyUploaded} already in Google Photos</p>
+              <p className="text-stone-400">
+                {alreadyUploaded} already in Google Photos
+              </p>
             )}
           </div>
         </div>
+
         <div
-          className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/[0.06]"
+          className="mt-4 h-2 overflow-hidden rounded-full bg-white/[0.08]"
           role="progressbar"
           aria-valuemin={0}
           aria-valuemax={100}
@@ -180,12 +200,12 @@ export function ActivityJob({
           aria-label={`Backup ${Math.round(job.percent)} percent complete`}
         >
           <div
-            className="h-full rounded-full bg-photon-400 transition-[width] duration-300"
+            className="h-full rounded-full bg-photon-400 transition-[width] duration-300 ease-out"
             style={{ width: `${Math.min(100, Math.max(0, job.percent))}%` }}
           />
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2">
+        <div className="mt-5 flex flex-wrap items-center gap-2">
           {active && job.status !== "cancelling" && (
             <Button variant="secondary" size="sm" onClick={onCancel}>
               <X className="size-3.5" />
@@ -219,32 +239,44 @@ export function ActivityJob({
           )}
         </div>
 
-        <p className="mt-3 text-[13px] leading-relaxed text-stone-500">
-          {active
-            ? "This backup is saved on this computer. You can close Photonic and resume it here later."
-            : job.status === "completed"
-              ? "Finished. Your originals stay untouched."
-              : job.status === "completed_with_failures"
-                ? "Some files need attention. Retry failed files, or check the unconfirmed ones."
-                : job.status === "interrupted"
-                  ? "Interrupted. Resume continues the remaining files; unconfirmed files need a decision."
-                  : job.status === "needs_auth"
-                    ? "Reconnect Google Photos, then resume or retry."
-                    : job.status === "cancelled"
-                      ? "Stopped. Nothing else will upload from this backup."
-                      : "This backup stopped before finishing."}
-        </p>
-        {processingVideos > 0 && (
-          <p className="mt-1 text-[13px] leading-relaxed text-stone-500">
-            {processingVideos} video{processingVideos === 1 ? "" : "s"} uploaded
-            and may still be processing in Google Photos. That isn't a failure.
+        <div className="mt-4 border-t border-white/[0.06] pt-3.5">
+          <p className="flex items-start gap-2 text-[13px] leading-relaxed text-stone-400">
+            {active && (
+              <ShieldCheck
+                className="mt-0.5 size-4 shrink-0 text-emerald-400/80"
+                strokeWidth={1.7}
+                aria-hidden="true"
+              />
+            )}
+            <span>
+              {active
+                ? "This backup is saved on this computer. You can close Photonic and resume it here later."
+                : job.status === "completed"
+                  ? "Finished. Your originals stay untouched."
+                  : job.status === "completed_with_failures"
+                    ? "Some files need attention. Retry failed files, or check the unconfirmed ones."
+                    : job.status === "interrupted"
+                      ? "Interrupted. Resume continues the remaining files; unconfirmed files need a decision."
+                      : job.status === "needs_auth"
+                        ? "Reconnect Google Photos, then resume or retry."
+                        : job.status === "cancelled"
+                          ? "Stopped. Nothing else will upload from this backup."
+                          : "This backup stopped before finishing."}
+            </span>
           </p>
-        )}
+          {processingVideos > 0 && (
+            <p className="mt-1.5 text-[13px] leading-relaxed text-stone-400">
+              {processingVideos} video{processingVideos === 1 ? "" : "s"}{" "}
+              uploaded and may still be processing in Google Photos. That isn't
+              a failure.
+            </p>
+          )}
+        </div>
       </section>
 
       {(authRequired || job.status === "needs_auth") && (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-[14px] bg-red-400/[0.05] px-4 py-3">
-          <p className="text-sm text-red-200/80">
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-red-400/25 bg-red-400/[0.07] px-4 py-3.5">
+          <p className="text-sm text-red-100">
             Google Photos needs reconnecting before this backup can continue.
           </p>
           <Button variant="secondary" size="sm" onClick={onReconnect}>
@@ -254,13 +286,13 @@ export function ActivityJob({
       )}
 
       <section className="mt-8">
-        <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-          <h2 className="text-sm font-semibold text-stone-200">Files</h2>
-          <span className="text-[13px] text-stone-500">
+        <div className="flex items-center justify-between border-b border-white/[0.07] pb-3">
+          <h2 className="text-[14px] font-semibold text-stone-100">Files</h2>
+          <span className="text-[13px] tabular-nums text-stone-400">
             {formatCount(job.totalFiles)} total
           </span>
         </div>
-        <div className="divide-y divide-white/[0.04]">
+        <div className="mt-1 divide-y divide-white/[0.05]">
           {visible.map((file) => (
             <MediaRow
               key={file.fileId ?? file.path}
@@ -290,7 +322,7 @@ export function ActivityJob({
           </div>
         )}
         {job.filesTruncated && (
-          <p className="mt-3 text-[12px] leading-relaxed text-stone-600">
+          <p className="mt-3 text-[12px] leading-relaxed text-stone-400">
             Showing the first {formatCount(job.files.length)} of{" "}
             {formatCount(job.totalFiles)} files. Every file is still backed up;
             choose a narrower folder to inspect the rest.
@@ -299,16 +331,16 @@ export function ActivityJob({
       </section>
 
       {(keys.length > 0 || rawErrors.length > 0 || job.lastError) && (
-        <section className="mt-8 border-t border-white/[0.06] pt-2">
+        <section className="mt-8 border-t border-white/[0.07] pt-2">
           <Disclosure title="Technical details">
             {job.lastError && (
-              <p className="mb-3 text-[13px] leading-relaxed text-stone-500">
+              <p className="mb-3 text-[13px] leading-relaxed text-stone-400">
                 {job.lastError}
               </p>
             )}
             {keys.length > 0 && (
               <div className="mb-4">
-                <p className="text-[13px] font-medium text-stone-400">
+                <p className="text-[13px] font-medium text-stone-300">
                   Google Photos IDs
                 </p>
                 <ul className="mt-2 space-y-1.5">
@@ -317,7 +349,7 @@ export function ActivityJob({
                       key={file.fileId ?? file.path}
                       className="flex items-center gap-2 text-[12px]"
                     >
-                      <span className="min-w-0 flex-1 truncate font-mono text-stone-500">
+                      <span className="min-w-0 flex-1 truncate font-mono text-stone-400">
                         {basename(file.path)} · {file.remoteId}
                       </span>
                       <button
@@ -328,13 +360,13 @@ export function ActivityJob({
                             file.remoteId ?? "",
                           )
                         }
-                        className="cursor-pointer rounded-md p-1 text-stone-600 transition hover:text-stone-300"
+                        className="cursor-pointer rounded-md p-1 text-stone-400 transition hover:bg-white/[0.06] hover:text-stone-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400"
                         aria-label={`Copy Google Photos ID for ${basename(file.path)}`}
                       >
                         {copied === (file.fileId ?? file.path) ? (
-                          <Check className="size-3 text-emerald-400" />
+                          <Check className="size-3.5 text-emerald-400" />
                         ) : (
-                          <Copy className="size-3" />
+                          <Copy className="size-3.5" />
                         )}
                       </button>
                     </li>
@@ -344,14 +376,16 @@ export function ActivityJob({
             )}
             {rawErrors.length > 0 && (
               <div>
-                <p className="text-[13px] font-medium text-stone-400">
+                <p className="text-[13px] font-medium text-stone-300">
                   Error codes
                 </p>
-                <ul className="mt-2 space-y-1 text-[12px] text-stone-500">
+                <ul className="mt-2 space-y-1 text-[12px] text-stone-400">
                   {rawErrors.map((file) => (
                     <li key={file.fileId ?? file.path}>
-                      <span className="font-mono">{file.code}</span> ·{" "}
-                      {basename(file.path)}
+                      <span className="font-mono text-stone-300">
+                        {file.code}
+                      </span>{" "}
+                      · {basename(file.path)}
                     </li>
                   ))}
                 </ul>

@@ -13,17 +13,20 @@ export function SetupChecklist({ steps }: { steps: SetupStep[] }) {
   return (
     <ol className="divide-y divide-white/[0.06]">
       {steps.map((step, index) => (
-        <li key={step.title} className="flex items-center gap-3 py-3">
+        <li
+          key={step.title}
+          className="flex items-center gap-3.5 py-3.5 first:pt-2 last:pb-2"
+        >
           <span
             aria-hidden="true"
             className={cn(
-              "grid size-6 shrink-0 place-items-center rounded-full border text-[12px] font-semibold",
+              "grid size-6 shrink-0 place-items-center rounded-full border text-[12px] font-semibold tabular-nums",
               step.state === "done" &&
-                "border-emerald-400/25 bg-emerald-400/10 text-emerald-300",
+                "border-emerald-400/30 bg-emerald-400/12 text-emerald-300",
               step.state === "next" &&
-                "border-photon-400/30 bg-photon-400/10 text-photon-300",
+                "border-photon-400/40 bg-photon-400/12 text-photon-300",
               step.state === "todo" &&
-                "border-white/10 bg-white/[0.03] text-stone-500",
+                "border-white/[0.12] bg-white/[0.04] text-stone-400",
             )}
           >
             {step.state === "done" ? (
@@ -36,12 +39,12 @@ export function SetupChecklist({ steps }: { steps: SetupStep[] }) {
             <p
               className={cn(
                 "text-sm font-medium",
-                step.state === "todo" ? "text-stone-400" : "text-stone-100",
+                step.state === "todo" ? "text-stone-300" : "text-stone-100",
               )}
             >
               {step.title}
             </p>
-            <p className="mt-0.5 text-[13px] leading-relaxed text-stone-500">
+            <p className="mt-0.5 text-[13px] leading-relaxed text-stone-400">
               {step.detail}
             </p>
           </div>

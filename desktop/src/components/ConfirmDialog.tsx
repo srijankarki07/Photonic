@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { cn } from "../lib/cn";
 import { Button } from "./ui";
 
 export function ConfirmDialog({
@@ -66,7 +65,7 @@ export function ConfirmDialog({
 
   return (
     <div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-6 backdrop-blur-sm"
+      className="fixed inset-0 z-50 grid place-items-center bg-black/65 p-6 backdrop-blur-sm"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onCancel();
       }}
@@ -76,32 +75,27 @@ export function ConfirmDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="confirm-title"
-        className="w-full max-w-md rounded-[18px] border border-white/10 bg-ink-850 p-6 shadow-[0_24px_80px_-24px_rgba(0,0,0,0.9)]"
+        className="animate-dialog-in w-full max-w-md rounded-[16px] border border-white/[0.11] bg-ink-850 p-6 shadow-[0_24px_80px_-20px_rgba(0,0,0,0.9)]"
       >
         <h2
           id="confirm-title"
-          className="text-lg font-medium text-stone-100"
+          className="text-[17px] font-semibold text-stone-100"
         >
           {title}
         </h2>
-        <p className="mt-2 text-sm leading-relaxed text-stone-400">{body}</p>
+        <p className="mt-2 text-sm leading-relaxed text-stone-300">{body}</p>
         <div className="mt-6 flex justify-end gap-2">
-          <Button variant="ghost" onClick={onCancel}>
+          <Button variant="ghost" size="sm" onClick={onCancel}>
             {cancelLabel}
           </Button>
-          <button
+          <Button
             ref={confirmRef}
-            type="button"
+            variant={danger ? "danger" : "primary"}
+            size="sm"
             onClick={onConfirm}
-            className={cn(
-              "cursor-pointer rounded-[10px] px-3.5 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-300",
-              danger
-                ? "bg-red-400/15 text-red-200 hover:bg-red-400/25"
-                : "bg-photon-400 text-ink-950 hover:bg-photon-300",
-            )}
           >
             {confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

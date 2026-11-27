@@ -44,12 +44,12 @@ export function TransparencyDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="transparency-title"
-        className="flex max-h-[82vh] w-full max-w-2xl flex-col overflow-hidden rounded-[18px] border border-white/10 bg-ink-850 shadow-[0_24px_90px_-24px_rgba(0,0,0,0.95)]"
+        className="animate-dialog-in flex max-h-[82vh] w-full max-w-2xl flex-col overflow-hidden rounded-[16px] border border-white/[0.11] bg-ink-850 shadow-[0_24px_90px_-20px_rgba(0,0,0,0.95)]"
       >
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
+        <div className="flex items-center justify-between border-b border-white/[0.07] px-6 py-4">
           <h2
             id="transparency-title"
-            className="font-display text-[22px] text-stone-100"
+            className="display text-[22px] text-stone-100"
           >
             How Photonic works
           </h2>
@@ -58,7 +58,7 @@ export function TransparencyDialog({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="cursor-pointer rounded-lg p-1.5 text-stone-500 transition hover:bg-white/[0.05] hover:text-stone-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400"
+            className="cursor-pointer rounded-lg p-1.5 text-stone-400 transition hover:bg-white/[0.06] hover:text-stone-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400"
           >
             <X className="size-4" />
           </button>

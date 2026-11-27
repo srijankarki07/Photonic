@@ -52,13 +52,13 @@ export function AuthBanner({
           <p className="text-[14px] font-medium text-photon-200">
             {copy.title}
             {reconnect && emailMasked ? (
-              <span className="font-normal text-photon-200/70">
+              <span className="font-normal text-photon-200/80">
                 {" "}
                 ({emailMasked})
               </span>
             ) : null}
           </p>
-          <p className="mt-0.5 text-[13px] leading-relaxed text-photon-200/70">
+          <p className="mt-0.5 text-[13px] leading-relaxed text-photon-200/80">
             {copy.body}
           </p>
         </div>
@@ -71,7 +71,7 @@ export function AuthBanner({
             onClick={onDismiss}
             aria-label="Dismiss for now"
             title="Dismiss for now"
-            className="grid size-8 cursor-pointer place-items-center rounded-[8px] text-photon-200/60 transition hover:bg-white/[0.06] hover:text-photon-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400"
+            className="grid size-8 cursor-pointer place-items-center rounded-[8px] text-photon-200/75 transition hover:bg-white/[0.08] hover:text-photon-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400"
           >
             <X className="size-4" />
           </button>

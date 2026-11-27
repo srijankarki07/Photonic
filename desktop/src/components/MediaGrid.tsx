@@ -20,7 +20,7 @@ export function MediaGrid({
   return (
     <div
       className={cn(
-        "grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4",
+        "grid grid-cols-2 gap-3.5 sm:grid-cols-3 xl:grid-cols-4",
         className,
       )}
     >
@@ -28,9 +28,9 @@ export function MediaGrid({
         const url = item.mediaType === "image" ? mediaUrl(item.absPath) : null;
         const Icon = item.mediaType === "video" ? Film : ImageIcon;
         return (
-          <figure key={item.absPath} className="min-w-0" title={item.name}>
-            <div className="relative aspect-square overflow-hidden rounded-[10px] bg-ink-850">
-              <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-ink-800 to-ink-900 text-stone-600">
+          <figure key={item.absPath} className="group min-w-0" title={item.name}>
+            <div className="relative aspect-square overflow-hidden rounded-[11px] bg-ink-850 ring-1 ring-inset ring-white/[0.08]">
+              <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-ink-800 to-ink-900 text-stone-500">
                 <Icon className="size-6" strokeWidth={1.4} />
               </div>
               {url && (
@@ -39,24 +39,25 @@ export function MediaGrid({
                   alt=""
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 ease-out group-hover:scale-[1.03]"
                   onError={(event) => {
                     event.currentTarget.style.display = "none";
                   }}
                 />
               )}
               {item.mediaType === "video" && (
-                <span className="absolute bottom-1.5 left-1.5 rounded-[5px] bg-black/65 px-1.5 py-0.5 text-[11px] font-medium text-stone-200">
+                <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 rounded-[6px] border border-white/10 bg-black/75 px-1.5 py-0.5 text-[11px] font-medium text-stone-100 backdrop-blur-xs">
+                  <Film className="size-3" strokeWidth={1.8} />
                   Video
                 </span>
               )}
             </div>
-            <figcaption className="mt-1.5 min-w-0">
+            <figcaption className="mt-2 min-w-0">
               <p className="truncate text-[13px] font-medium text-stone-200">
                 {item.name}
               </p>
               {typeof item.size === "number" && (
-                <p className="text-[12px] text-stone-500">
+                <p className="mt-0.5 text-[12px] tabular-nums text-stone-400">
                   {formatBytes(item.size)}
                 </p>
               )}

@@ -333,25 +333,29 @@ function App() {
     let disposed = false;
     let unlisten: (() => void) | undefined;
 
-    getCurrentWebview()
-      .onDragDropEvent((event) => {
-        const payload = event.payload;
-        if (payload.type === "enter") {
-          setDragging(true);
-        } else if (payload.type === "leave") {
-          setDragging(false);
-        } else if (payload.type === "drop") {
-          setDragging(false);
-          if (payload.paths.length) void runScan(payload.paths);
-        }
-      })
-      .then((stop) => {
-        if (disposed) stop();
-        else unlisten = stop;
-      })
-      .catch(() => {
-        // Browser preview has no native drag/drop.
-      });
+    try {
+      getCurrentWebview()
+        .onDragDropEvent((event) => {
+          const payload = event.payload;
+          if (payload.type === "enter") {
+            setDragging(true);
+          } else if (payload.type === "leave") {
+            setDragging(false);
+          } else if (payload.type === "drop") {
+            setDragging(false);
+            if (payload.paths.length) void runScan(payload.paths);
+          }
+        })
+        .then((stop) => {
+          if (disposed) stop();
+          else unlisten = stop;
+        })
+        .catch(() => {
+          // Browser preview has no native drag/drop.
+        });
+    } catch {
+      // Browser preview has no Tauri webview internals.
+    }
 
     return () => {
       disposed = true;
@@ -363,6 +367,38 @@ function App() {
     setSection(next);
     setFlow(null);
   }, []);
+
+  // Desktop keyboard shortcuts: Ctrl+O to choose folders, Ctrl+, for Settings.
+  useEffect(() => {
+    if (onboardingOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey) || event.altKey || event.shiftKey) {
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      const key = event.key.toLowerCase();
+      if (key === "o") {
+        event.preventDefault();
+        void chooseFolder();
+      } else if (key === ",") {
+        event.preventDefault();
+        goSection("settings");
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onboardingOpen, chooseFolder, goSection]);
+
+  const hasActiveJob = Boolean(jobs.job && jobs.job.finishedAt === null);
+  const activityAttention = hasActiveJob || jobs.recovered.length > 0;
 
   if (onboardingOpen && flow?.kind !== "connect") {
     return (
@@ -468,25 +504,26 @@ function App() {
     );
 
   return (
-    <div className="grain relative flex h-full overflow-hidden bg-ink-950 font-sans text-stone-200">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 prism-light opacity-60" />
+    <div className="relative flex h-full overflow-hidden bg-ink-950 font-sans text-stone-200">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 prism-light opacity-55" />
 
-      <aside className="relative z-10 flex w-[236px] shrink-0 flex-col border-r border-white/[0.06] bg-ink-900/70 backdrop-blur-xl">
-        <div className="flex h-16 items-center gap-2.5 px-5">
+      <aside className="relative z-10 flex w-[240px] shrink-0 flex-col border-r border-white/[0.07] bg-ink-900/85 backdrop-blur-xl">
+        <div className="flex h-16 items-center gap-3 px-5">
           <BrandMark className="size-8 text-photon-400" />
           <div className="leading-none">
-            <p className="text-[17px] font-semibold tracking-[-0.01em] text-stone-50">
+            <p className="text-[16px] font-semibold tracking-[-0.015em] text-stone-50">
               Photonic
             </p>
-            <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.16em] text-stone-600">
-              Photo backup
+            <p className="mt-1 text-[11px] font-medium text-stone-400">
+              Local-first photo backup
             </p>
           </div>
         </div>
 
-        <nav className="mt-3 space-y-0.5 px-3" aria-label="Main">
+        <nav className="mt-3 space-y-1 px-3" aria-label="Main">
           {NAV.map((item) => {
             const active = section === item.id && !flow;
+            const showActivityDot = item.id === "activity" && activityAttention;
             return (
               <button
                 key={item.id}
@@ -494,33 +531,38 @@ function App() {
                 onClick={() => goSection(item.id)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex w-full cursor-pointer items-center gap-3 rounded-[9px] px-2.5 py-2.5 text-[14px] font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400",
+                  "flex w-full cursor-pointer items-center gap-3 rounded-[10px] border px-3 py-2.5 text-[14px] font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400",
                   active
-                    ? "bg-white/[0.055] text-stone-100"
-                    : "text-stone-500 hover:bg-white/[0.03] hover:text-stone-300",
+                    ? "border-white/[0.08] bg-white/[0.065] text-stone-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
+                    : "border-transparent text-stone-400 hover:bg-white/[0.035] hover:text-stone-100",
                 )}
               >
-                {active && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute left-0 top-1/2 h-4 w-px -translate-y-1/2 bg-photon-400"
-                  />
-                )}
                 <item.icon
                   className={cn(
-                    "size-[18px]",
-                    active ? "text-photon-400" : "text-stone-600",
+                    "size-[18px] shrink-0",
+                    active ? "text-photon-400" : "text-stone-500",
                   )}
                   strokeWidth={1.7}
                 />
-                {item.label}
+                <span className="flex-1 text-left">{item.label}</span>
+                {showActivityDot && (
+                  <span
+                    aria-label={
+                      hasActiveJob ? "Backup in progress" : "Needs attention"
+                    }
+                    className={cn(
+                      "size-2 shrink-0 rounded-full bg-photon-400",
+                      hasActiveJob && "animate-pulse",
+                    )}
+                  />
+                )}
               </button>
             );
           })}
         </nav>
 
-        <div className="mt-auto space-y-3 p-3">
-          <div className="px-2">
+        <div className="mt-auto space-y-2.5 p-3">
+          <div className="rounded-[12px] border border-white/[0.07] bg-white/[0.025] p-3">
             {auth.status?.connected ? (
               <>
                 <StatusDot
@@ -530,30 +572,34 @@ function App() {
                       ? "Sign-in expired"
                       : (auth.status.emailMasked ?? "Connected")
                   }
+                  className="w-full [&>span:last-child]:truncate"
                 />
                 <button
                   type="button"
                   onClick={() => openConnect(null)}
-                  className="mt-1.5 cursor-pointer text-[12px] text-stone-500 transition hover:text-stone-300"
+                  className="mt-2 cursor-pointer rounded-[6px] text-[12px] font-medium text-stone-400 transition hover:text-stone-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400"
                 >
                   Manage connection
                 </button>
               </>
             ) : (
-              <Button
-                variant="secondary"
-                size="sm"
-                className="w-full"
-                onClick={() => openConnect(null)}
-              >
-                Connect Google Photos
-              </Button>
+              <>
+                <StatusDot tone="muted" label="Not connected" />
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="mt-2.5 w-full"
+                  onClick={() => openConnect(null)}
+                >
+                  Connect Google Photos
+                </Button>
+              </>
             )}
           </div>
           <button
             type="button"
             onClick={() => setFlow({ kind: "transparency" })}
-            className="w-full cursor-pointer px-2 text-left text-[12px] leading-relaxed text-stone-600 transition hover:text-stone-400"
+            className="w-full cursor-pointer rounded-[8px] px-2.5 py-1.5 text-left text-[12px] text-stone-400 transition hover:bg-white/[0.03] hover:text-stone-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400"
           >
             How Photonic works
           </button>
@@ -578,13 +624,13 @@ function App() {
       </div>
 
       {dragging && (
-        <div className="pointer-events-none fixed inset-0 z-50 grid place-items-center bg-ink-950/75 backdrop-blur-sm">
-          <div className="flex flex-col items-center rounded-[20px] border border-photon-400/25 bg-ink-900/80 px-16 py-12 text-center shadow-2xl">
+        <div className="pointer-events-none fixed inset-0 z-50 grid place-items-center bg-ink-950/80 backdrop-blur-sm">
+          <div className="animate-dialog-in flex flex-col items-center rounded-[20px] border border-photon-400/35 bg-ink-900/95 px-16 py-12 text-center shadow-2xl">
             <BrandMark className="size-10 text-photon-400" />
-            <p className="mt-4 font-display text-2xl text-stone-100">
+            <p className="display mt-4 text-2xl text-stone-50">
               Drop folders or photos
             </p>
-            <p className="mt-1 text-sm text-stone-500">
+            <p className="mt-1.5 text-sm text-stone-400">
               Nothing uploads until you review.
             </p>
           </div>

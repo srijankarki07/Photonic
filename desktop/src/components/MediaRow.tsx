@@ -40,8 +40,8 @@ function MediaRowComponent({
 
   const content = (
     <>
-      <div className="relative size-12 shrink-0 overflow-hidden rounded-[10px] bg-ink-850">
-        <div className="absolute inset-0 grid place-items-center text-stone-600">
+      <div className="relative size-11 shrink-0 overflow-hidden rounded-[9px] bg-ink-850 ring-1 ring-inset ring-white/[0.08]">
+        <div className="absolute inset-0 grid place-items-center text-stone-500">
           <Icon className="size-4" strokeWidth={1.5} />
         </div>
         {url && (
@@ -58,11 +58,13 @@ function MediaRowComponent({
         )}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[14px] font-medium text-stone-200">
+        <p className="truncate text-[14px] font-medium text-stone-100">
           {name}
         </p>
         {detail && (
-          <p className="mt-0.5 truncate text-[13px] text-stone-500">{detail}</p>
+          <p className="mt-0.5 truncate text-[13px] tabular-nums text-stone-400">
+            {detail}
+          </p>
         )}
       </div>
       {state && <StatusDot tone={state.tone} label={state.label} />}
@@ -71,11 +73,15 @@ function MediaRowComponent({
   );
 
   const className =
-    "flex w-full items-center gap-3 rounded-[10px] px-1.5 py-2 text-left transition hover:bg-white/[0.025] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400";
+    "flex w-full items-center gap-3 rounded-[10px] px-2 py-2.5 text-left transition-colors duration-150 hover:bg-white/[0.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400";
 
   if (onClick) {
     return (
-      <button type="button" onClick={onClick} className={cn(className, "cursor-pointer")}>
+      <button
+        type="button"
+        onClick={onClick}
+        className={cn(className, "cursor-pointer")}
+      >
         {content}
       </button>
     );

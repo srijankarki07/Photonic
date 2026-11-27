@@ -31,7 +31,7 @@ export function SegmentedTabs({
       role="tablist"
       aria-label="Backup activity"
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-[10px] bg-ink-900 p-1",
+        "inline-flex items-center gap-1 rounded-[11px] border border-white/[0.07] bg-ink-900 p-1",
         className,
       )}
     >
@@ -66,18 +66,20 @@ export function SegmentedTabs({
               }
             }}
             className={cn(
-              "inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-[14px] font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400",
+              "inline-flex items-center gap-2 rounded-[8px] px-3.5 py-1.5 text-[14px] font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-photon-400",
               selected
-                ? "bg-ink-700 text-stone-100"
-                : "text-stone-500 hover:text-stone-300",
+                ? "bg-ink-700 text-stone-50 shadow-sm ring-1 ring-white/[0.08]"
+                : "text-stone-400 hover:text-stone-200",
             )}
           >
             {tab.label}
             {typeof tab.count === "number" && (
               <span
                 className={cn(
-                  "text-[12px] tabular-nums",
-                  selected ? "text-stone-400" : "text-stone-600",
+                  "rounded-full px-1.5 py-0.25 text-[12px] tabular-nums",
+                  selected
+                    ? "bg-white/[0.08] text-stone-200"
+                    : "text-stone-400",
                 )}
               >
                 {tab.count}

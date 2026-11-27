@@ -21,13 +21,13 @@ export function TransparencyContent({
   showPaths?: boolean;
 }) {
   return (
-    <div className="space-y-7">
+    <div className="space-y-6">
       {TRANSPARENCY_SECTIONS.map((section) => (
         <section key={section.title}>
           <h3 className="text-[15px] font-semibold text-stone-100">
             {section.title}
           </h3>
-          <p className="mt-1.5 text-sm leading-relaxed text-stone-400">
+          <p className="mt-1.5 text-sm leading-relaxed text-stone-300">
             {section.body}
           </p>
         </section>
@@ -37,7 +37,7 @@ export function TransparencyContent({
         <h3 className="text-[15px] font-semibold text-stone-100">
           ReVanced and the sign-in key
         </h3>
-        <p className="mt-1.5 text-sm leading-relaxed text-stone-400">
+        <p className="mt-1.5 text-sm leading-relaxed text-stone-300">
           The sign-in key comes from the modified Photos app (ReVanced) on your
           Android phone. Photonic never asks for your Google password. If you do
           not have ReVanced yet, its website explains the phone setup.
@@ -58,12 +58,12 @@ export function TransparencyContent({
           <h3 className="text-[15px] font-semibold text-stone-100">
             On this computer
           </h3>
-          <p className="mt-1.5 text-sm leading-relaxed text-stone-400">
+          <p className="mt-1.5 text-sm leading-relaxed text-stone-300">
             Photonic keeps backup history in a local database and writes a
             redacted troubleshooting log. No media copies and no sign-in key are
             stored in either.
           </p>
-          <div className="mt-3 divide-y divide-white/[0.06]">
+          <div className="mt-3 divide-y divide-white/[0.06] rounded-[12px] border border-white/[0.07] bg-ink-900/60 px-4">
             <PathRow
               label="Data folder"
               value={info.dataDir}
@@ -83,14 +83,16 @@ export function TransparencyContent({
         </section>
       )}
 
-      <Disclosure title="Technical details">
-        <p className="text-[13px] leading-relaxed text-stone-500">
-          Photonic uses an unofficial mobile Google Photos upload path. The
-          upload tool is open source (MIT). Photonic itself is local-only and
-          does not operate a server. Explanation version {CONSENT_VERSION}.
-          Google and ReVanced are trademarks of their respective owners.
-        </p>
-      </Disclosure>
+      <div className="border-t border-white/[0.06] pt-2">
+        <Disclosure title="Technical details">
+          <p className="text-[13px] leading-relaxed text-stone-400">
+            Photonic uses an unofficial mobile Google Photos upload path. The
+            upload tool is open source (MIT). Photonic itself is local-only and
+            does not operate a server. Explanation version {CONSENT_VERSION}.
+            Google and ReVanced are trademarks of their respective owners.
+          </p>
+        </Disclosure>
+      </div>
     </div>
   );
 }
@@ -105,10 +107,13 @@ function PathRow({
   onOpen: () => void;
 }) {
   return (
-    <div className="flex items-center gap-3 py-2.5">
+    <div className="flex items-center gap-3 py-3">
       <div className="min-w-0 flex-1">
-        <p className="text-[13px] font-medium text-stone-300">{label}</p>
-        <p className="mt-0.5 truncate font-mono text-[12px] text-stone-600" title={value}>
+        <p className="text-[13px] font-medium text-stone-200">{label}</p>
+        <p
+          className="mt-0.5 truncate font-mono text-[12px] text-stone-400"
+          title={value}
+        >
           {value}
         </p>
       </div>
