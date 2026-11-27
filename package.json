@@ -1,7 +1,7 @@
 {
   "name": "photonic",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Local-first Google Photos backup for Linux",
   "packageManager": "pnpm@12.14.0",
   "scripts": {

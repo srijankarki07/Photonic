@@ -1,6 +1,6 @@
 [package]
 name = "photonic"
-version = "0.1.0"
+version = "0.1.1"
 description = "Local-first Google Photos backup and organization for Linux"
 authors = ["Photonic contributors"]
 edition = "2024"

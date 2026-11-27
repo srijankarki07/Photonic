@@ -26,7 +26,7 @@ def _print(payload: dict, pretty: bool) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="photonic-engine")
-    parser.add_argument("--version", action="version", version="photonic-engine 0.1.0")
+    parser.add_argument("--version", action="version", version="photonic-engine 0.1.1")
     sub = parser.add_subparsers(dest="command")
 
     sub.add_parser("serve", help="Speak NDJSON RPC over stdio (default)")

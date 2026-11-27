@@ -274,7 +274,7 @@ export function Settings({
         <section className="surface-panel rounded-[16px] p-5">
           <h2 className="text-[15px] font-semibold text-stone-100">About</h2>
           <p className="mt-1.5 text-sm leading-relaxed text-stone-400">
-            Photonic 0.1.0 · an independent, local-first app. Not made by,
+            Photonic 0.1.1 · an independent, local-first app. Not made by,
             endorsed by, or supported by Google or the ReVanced project.
           </p>
         </section>
